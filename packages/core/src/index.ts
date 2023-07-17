@@ -125,7 +125,6 @@ function VitePluginInspector(options: VitePluginInspectorOptions = DEFAULT_INSPE
       // 虚拟模块 vue-inspector-path 替换为 load.js 的真实路径（从 transformIndexHtml 钩子进入、也会在 tansform 中注入）
       // 为什么有这么多的 virtual:vue-inspector-path 进入？
       else if (importee.startsWith('virtual:vue-inspector-path:')) {
-        console.log(importee)
         const resolved = importee.replace('virtual:vue-inspector-path:', `${inspectorPath}/`)
         return resolved
       }
@@ -157,7 +156,7 @@ function VitePluginInspector(options: VitePluginInspectorOptions = DEFAULT_INSPE
 
       const isJsx = filename.endsWith('.jsx') || filename.endsWith('.tsx') || (filename.endsWith('.vue') && query.isJsx)
       const isTpl = filename.endsWith('.vue') && query.type !== 'style' && !query.raw
-      // TODO 对模板进行编译
+      // 对模板进行编译
       if (isJsx || isTpl)
         return compileSFCTemplate({ code, id: filename, type: isJsx ? 'jsx' : 'template' })
 
@@ -168,6 +167,7 @@ function VitePluginInspector(options: VitePluginInspectorOptions = DEFAULT_INSPE
         || (appendTo instanceof RegExp && appendTo.test(filename)))
         return { code: `${code}\nimport 'virtual:vue-inspector-path:load.js'` }
     },
+    // 重写了的打印函数server
     configureServer(server) {
       const _printUrls = server.printUrls
       const { toggleComboKey } = normalizedOptions

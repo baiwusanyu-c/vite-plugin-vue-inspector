@@ -16,6 +16,12 @@ interface CompileSFCTemplateOptions {
   id: string
   type: 'template' | 'jsx'
 }
+
+// 编译sfc的模板。对每一个html标签，识别出行数与开始位置，并添加上属性
+// <div class="container" data-v-inspector="src/App.vue:2:3">
+//     1
+// </div>
+// 点击打开到 editor 时，这些属性会用得到
 export async function compileSFCTemplate(
   { code, id, type }: CompileSFCTemplateOptions,
 ) {
@@ -89,7 +95,6 @@ export async function compileSFCTemplate(
       default:
         break
     }
-
     resolve(s.toString())
   })
 
